@@ -1,0 +1,7 @@
+reset
+set xlabel 'Tiempo'
+set ylabel 'Proporción'
+plot 'resultados.dat' using 1:2 with lines lw 2 title 'Corruptos'
+replot 'resultados.dat' using 1:3 with lines lw 2 title 'Honestos'
+replot 'resultados.dat' using 1:4 with lines lw 2 title 'Reservados'
+
