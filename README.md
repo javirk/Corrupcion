@@ -1,1 +1,1 @@
-# Corrupcion
+# Corrupción
