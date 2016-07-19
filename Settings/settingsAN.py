@@ -1,7 +1,9 @@
-def init():
+def init(lugar = 'MT'):
 	global lista
-
-	directorio = 'Resultados/Montecarlo/'
+	if lugar == 'ES':
+		directorio = 'Resultados/Estacionario/'
+	else:
+		directorio = 'Resultados/Montecarlo/'
 	nombreArchivo = 'resu_r'
 
 	lista = {'directorio': directorio, 'nombre_archivo': nombreArchivo}

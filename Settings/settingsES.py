@@ -11,5 +11,6 @@ def init():
 	beta = 0.4
 	guardar = False
 	tiempo = 150
+	Nredes = 20
 
-	lista = {'k': k, 'N': N, 'delta1': delta1, 'delta2': delta2, 'alfa': alfa, 'beta': beta, 'r': r, 'b': b, 'guardar': guardar, 'tiempo': tiempo}
+	lista = {'Nredes': Nredes, 'k': k, 'N': N, 'delta1': delta1, 'delta2': delta2, 'alfa': alfa, 'beta': beta, 'r': r, 'b': b, 'guardar': guardar, 'tiempo': tiempo}

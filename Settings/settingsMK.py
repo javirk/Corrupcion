@@ -2,13 +2,13 @@ def init():
 	global lista
 
 	k = 6
-	N = 10
+	N = 1000
 	delta1 = 0.1
-	alfa = 0.5
+	alfa = 0.1
 	r = 0.05
 	delta2 = 0.1
 	b = 0.05
-	beta = 0.5
+	beta = 0.4
 	guardar = False
 	tiempo = 150
 

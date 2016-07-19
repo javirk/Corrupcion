@@ -9,8 +9,8 @@ def init():
 	delta2 = 0.1
 	b = 0.05
 	beta = 0.4
-	guardar = False
-	Nredes = 1
+	guardar = True
+	Nredes = 20
 	tiempo = 500
 	tiempoTer = 200
 
