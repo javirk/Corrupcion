@@ -16,16 +16,23 @@ C = np.zeros((N, 1))
 mediaH = []
 mediaC = []
 
-red = fER.red(guardar = settingsES.lista['guardar'], archivo = True, ruta = 'red_0.txt')
-H, C = fun.creaPersonas(H, C)
+for ired in range(0, settingsES.lista['Nredes']):
+	print("Red número "+str(ired))
+	propC = []
+	propR = []
+	propH = []
+	ruta = 'red_' + str(ired) + '.txt'
 
-for i in range(0, tiempo):
-	H, C = fun.estacionario(H, C, red)
-	#Se saca la media para cada tiempo para ver cómo evoluciona
-	mediaH.append(float(H.mean(0)))
-	mediaC.append(float(C.mean(0)))
+	red = fER.red(guardar = settingsES.lista['guardar'], archivo = True, ruta = ruta)
+	H, C = fun.creaPersonas(H, C)
 
-print('H = ' + str(mediaH[tiempo - 1]))
-print('C = ' + str(mediaC[tiempo - 1]))
+	for i in range(0, tiempo):
+		H, C = fun.estacionario(H, C, red)
+		#Se saca la media para cada tiempo para ver cómo evoluciona
+		mediaH.append(float(H.mean(0)))
+		mediaC.append(float(C.mean(0)))
 
-fun.escribeTodo(mediaC, mediaH)
+	"""print('H = ' + str(mediaH[tiempo - 1]))
+	print('C = ' + str(mediaC[tiempo - 1]))"""
+
+	fun.escribeTodo(mediaC, mediaH, ired)

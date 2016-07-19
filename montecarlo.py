@@ -13,7 +13,7 @@ k = settingsMT.lista['k']
 tiempo = settingsMT.lista['tiempo']
 tiempoTer = settingsMT.lista['tiempoTer']
 
-if settingsMT.lista['guardar'] == False:
+if not settingsMT.lista['guardar']:
 	print("Las redes no se guardarán, si quieres cambiarlo para el programa\n")
 
 S = [None]*N
@@ -26,7 +26,7 @@ for ired in range(0, settingsMT.lista['Nredes']):
 	R = fER.red(guardar = settingsMT.lista['guardar'], archivo = False, k = k, N = N, tipo = 'ER')
 	S = fun.creaPersonas(S)
 
-	completo = True
+	completo = False
 	if completo:
 		for t in range(0, tiempo + tiempoTer):
 			S = fun.montecarlo(S, R)

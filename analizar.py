@@ -3,7 +3,7 @@ sys.path.insert(0, '/Settings')
 sys.path.insert(0, '/Funciones')
 
 import Funciones.funcionesMT as fun, numpy as np, fnmatch, Settings.settingsAN as st, os
-st.init()
+st.init(lugar = 'ES')
 
 #Hay que importar tantas redes como haya en el directorio que le pongamos. Por defecto será Resultados/ (definido en settingsAN)
 cantidad = len(fnmatch.filter(os.listdir(st.lista['directorio']), 'resu_r*.txt'))
@@ -29,6 +29,10 @@ mediaTotal['R'] = np.ma.average(mediaR, weights = desvR)
 desvTotal['R'] = fun.desvstaPesada(desvR)
 
 print('Se han obtenido los siguientes resultados: \n')
-print('H = ' + str(float("{0:.7f}".format(mediaTotal['H']))) + '±' + str(float("{0:.7f}".format(desvTotal['H']))) + '\n')
-print('C = ' + str(float("{0:.7f}".format(mediaTotal['C']))) + '±' + str(float("{0:.7f}".format(desvTotal['C']))) + '\n')
-print('R = ' + str(float("{0:.7f}".format(mediaTotal['R']))) + '±' + str(float("{0:.7f}".format(desvTotal['R']))) + '\n')
+print('H = ' + str(float("{0:.7f}".format(mediaTotal['H']))) + ' ± ' + str(float("{0:.7f}".format(desvTotal['H']))) + '\n')
+print('C = ' + str(float("{0:.7f}".format(mediaTotal['C']))) + ' ± ' + str(float("{0:.7f}".format(desvTotal['C']))) + '\n')
+print('R = ' + str(float("{0:.7f}".format(mediaTotal['R']))) + ' ± ' + str(float("{0:.7f}".format(desvTotal['R']))) + '\n')
+
+x = input("¿Quieres dibujar todo? [s/n]")
+if x == 's':
+    fun.dibujaGrafica(propC, propH, propR)
