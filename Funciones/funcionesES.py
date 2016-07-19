@@ -52,12 +52,50 @@ def creaPersonas(H, C):
 
 	return H, C
 
-def escribeTodo(propC, propH, iRed = 1):
-    nombre = 'Resultados/Estacionario/resu_r' + str(iRed) + '.txt'
-    outfile = open(nombre, 'wt')
-    for t in range(0, len(propC)):
-        l = [str(t), str(propC[t]), str(propH[t])]
-        data = '\t'.join("%s" % (x) for x in l)
-        data = data + "\n"
-        outfile.write(data)
-    outfile.close()
+def escribeTodo(propC, propH, iRed):
+	nombre = 'Resultados/Estacionario/resu_r' + str(iRed) + '.txt'
+	outfile = open(nombre, 'wt')
+	for t in range(0, len(propC)):
+		l = [str(t), str(propC[t]), str(propH[t]), str(1 - propC[t] - propH[t])]
+		data = '\t'.join("%s" % (x) for x in l)
+		data += "\n"
+		outfile.write(data)
+	outfile.close()
+
+
+def importarDatos(cantidad):
+	for i in range(0, cantidad):
+		filename = settingsAN.lista['directorio'] + settingsAN.lista['nombre_archivo'] + str(i) + '.txt'
+		if i == 0:
+			lon = len(open(filename).readlines())
+			propC = np.zeros((lon, 1))
+			propH = np.zeros((lon, 1))
+			propR = np.zeros((lon, 1))
+		else:
+			lon = len(open(filename).readlines())
+			aprop = np.zeros((lon, 1))
+			# De momento todos los archivos deben ser del mismo tamaño, si no salta la excepción y salta el archivo
+			try:
+				propC = np.hstack((propC, aprop))
+			except ValueError:
+				print('Los archivos no tienen la misma longitud')
+				break
+
+			propH = np.hstack((propH, aprop))
+			propR = np.hstack((propR, aprop))
+
+		with open(filename, 'rt') as f:
+			for linea in f:
+				if linea.startswith('#'):
+					continue
+
+				linea = linea.split()
+				t = int(linea[0])
+				# Se entiende que el tiempo siempre va de uno en uno, así que:
+				propC[t][i] = float(linea[1])
+				propH[t][i] = float(linea[2])
+				propR[t][i] = float(linea[3])
+			# propC.append(float(linea[1]))
+
+		f.close()
+	return propC, propH, propR

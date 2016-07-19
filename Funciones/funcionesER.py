@@ -62,7 +62,7 @@ class red:
 		
 	def dameER(self):
 		es = 0
-		while (es == 0):
+		while es == 0:
 			cuenta = np.zeros((self.N, 1))
 			self.kmax = 0
 			self.creaTodoER()
@@ -74,12 +74,8 @@ class red:
 			else:
 				es = 1
 
-		if self.guardar == True:
+		if self.guardar :
 			self.escribeRed()
-			
-		"""else:
-									print('La red no se guardara. Si cambias de opinion, la funcion se llama escribeRed()\n')
-									"""
 
 	def dibujaER(self):
 		import networkx as nx, matplotlib.pyplot as plt
@@ -132,7 +128,7 @@ class red:
 	def escribeRed(self):
 		import os
 		cuenta = 0
-		while os.path.isfile('red_'+str(cuenta)+'.txt'):
+		while os.path.isfile('Output/red_'+str(cuenta)+'.txt'):
 			cuenta += 1
 
 		nombre = 'Output/red_'+str(cuenta)+'.txt'
@@ -146,7 +142,7 @@ class red:
 				if self.conex[j][i] > j:
 					l = [str(j), str(int(self.conex[j][i]))]
 					data = ' '.join("%s" % (x) for x in l)
-					data = data + "\n"
+					data += "\n"
 					f.write(data)
 
 		f.close()
