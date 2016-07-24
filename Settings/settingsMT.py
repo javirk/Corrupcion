@@ -1,7 +1,8 @@
+lista = {}
 def init():
 	global lista
 
-	k = 6
+	k = 8
 	N = 1000
 	delta1 = 0.1
 	alfa = 0.1
@@ -9,8 +10,8 @@ def init():
 	delta2 = 0.1
 	b = 0.05
 	beta = 0.4
-	guardar = True
-	Nredes = 20
+	guardar = False
+	Nredes = 1
 	tiempo = 500
 	tiempoTer = 200
 

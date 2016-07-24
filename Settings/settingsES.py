@@ -1,3 +1,5 @@
+lista = {}
+
 def init():
 	global lista
 

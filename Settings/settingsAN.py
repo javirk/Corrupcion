@@ -1,3 +1,5 @@
+lista = {}
+
 def init(lugar = 'MT'):
 	global lista
 	if lugar == 'ES':
