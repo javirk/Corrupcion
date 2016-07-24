@@ -3,7 +3,7 @@ sys.path.insert(0, '/Settings')
 sys.path.insert(0, '/Funciones')
 
 import Funciones.funcionesMT as fun, numpy as np, fnmatch, Settings.settingsAN as st, os
-st.init(lugar = 'ES')
+st.init(lugar = 'MT')
 
 #Hay que importar tantas redes como haya en el directorio que le pongamos. Por defecto será Resultados/ (definido en settingsAN)
 cantidad = len(fnmatch.filter(os.listdir(st.lista['directorio']), 'resu_r*.txt'))

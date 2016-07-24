@@ -32,7 +32,4 @@ for ired in range(0, settingsES.lista['Nredes']):
 		mediaH.append(float(H.mean(0)))
 		mediaC.append(float(C.mean(0)))
 
-	"""print('H = ' + str(mediaH[tiempo - 1]))
-	print('C = ' + str(mediaC[tiempo - 1]))"""
-
 	fun.escribeTodo(mediaC, mediaH, ired)
