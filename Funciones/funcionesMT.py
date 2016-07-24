@@ -20,7 +20,7 @@ def escribeTodo(propC, propH, propR, iRed):
     outfile = open(nombre, 'wt')
     for t in range(0, len(propC)):
         l = [str(t), str(propC[t]), str(propH[t]), str(propR[t])]
-        data = '\t'.join("%s" % (x) for x in l)
+        data = '\t'.join("%s" % x for x in l)
         data += "\n"
         outfile.write(data)
     outfile.close()
@@ -39,7 +39,7 @@ def dameN(filename):
     return maximo +1
 
 def montecarlo(S, red):
-    Scopia = S
+    Scopia = [x[:] for x in S]
     for iPers in range(0, len(S)):
         producto = 1
         if Scopia[iPers] == 'R':
@@ -76,7 +76,7 @@ def montecarlo(S, red):
                     if random.random() > prob:
                         Scopia[iPers] = 'R'
 
-    S = Scopia
+    S = [x[:] for x in Scopia]
     return S
 
 def importarDatos(cantidad):
@@ -130,9 +130,9 @@ def dibujaGrafica(propC, propH, propR):
     ax.plot(t, propH, 'b-', linewidth = 1.0, alpha = 0.8, label = 'Honestos')
     ax.plot(t, propR, 'g-', linewidth = 1.0, alpha = 0.8, label = 'Reservados')
 
-    ax.plot(t, [propC.mean(0)]*len(propC), 'r-', linewidth = 1.5)
-    ax.plot(t, [propH.mean(0)] * len(propC), 'b-', linewidth=1.5)
-    ax.plot(t, [propR.mean(0)] * len(propC), 'g-', linewidth=1.5)
+    ax.plot(t, [propC.mean(0)] * len(propC), 'r-', linewidth = 1.5)
+    ax.plot(t, [propH.mean(0)] * len(propC), 'b-', linewidth = 1.5)
+    ax.plot(t, [propR.mean(0)] * len(propC), 'g-', linewidth = 1.5)
 
     ax.set_ylabel('Proporción')
     ax.set_xlabel('Tiempo')

@@ -62,7 +62,6 @@ def escribeTodo(propC, propH, iRed):
 		outfile.write(data)
 	outfile.close()
 
-
 def importarDatos(cantidad):
 	for i in range(0, cantidad):
 		filename = settingsAN.lista['directorio'] + settingsAN.lista['nombre_archivo'] + str(i) + '.txt'
