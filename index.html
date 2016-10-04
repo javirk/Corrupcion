@@ -55,6 +55,20 @@ analizar.py
 
 <p>The code itself also has functions to create scale-free and Erdös-Renyi networks that the program uses for the simulations. The networks are to be saved in the <code>Input</code> folder for the program to use them properly.</p>
 
+<p>In case you want to generate networks and use them separately from the main program a folder named <code>Output</code> with the same structure as the <code>Input</code> folder must be created.</p>
+
+<p>To run the program you must create a folder named <code>Resultados</code> with the following folders in it:</p>
+
+<pre><code>Estacionario
+EstacionarioPar
+Montecarlo
+MontecarloPar
+</code></pre>
+
+<p>Depending on the program you want to run (two folders for Markov [<code>Estacionario</code>] and two for Monte Carlo). After that the folders are created automatically by the program.</p>
+
+<p>For the results to be analyzed it is necessary to change the <code>settingsAN</code> file properly, pointing at the folder where the results are (there is an example in it).</p>
+
 <h3>
 <a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 
