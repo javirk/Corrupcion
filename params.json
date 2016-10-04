@@ -1,0 +1,6 @@
+{
+  "name": "A model of corruption",
+  "tagline": "",
+  "body": "# Corruption Model\r\n\r\n### Welcome\r\nThis program developed entirely under Python reproduces a simple stochastic agent-based model of corruption using Monte Carlo method. It also contains code for the implementation of a non-stationary Markov model designed specifically for the model.\r\n\r\n### Files\r\nIt basically has 5 main files that run independently:\r\n\r\n    esParametro.py\r\n    esTiempo.py\r\n    mtParametro.py\r\n    mtTiempo.py\r\n    analizar.py\r\n\r\nThe first two programs refer to the non-stationary Markov model, the \"mt\" ones are used to reproduce the Montecarlo and the last one just analyzes the results given. The parameters for each program can be changed in the Settings folder.\r\n\r\n### More information\r\nThe code itself also has functions to create scale-free and Erdös-Renyi networks that the program uses for the simulations. The networks are to be saved in the `Input` folder for the program to use them properly.\r\n\r\n### Authors and Contributors\r\nThis is an academic study and the code uploaded here is only made by Javier Gamazo (@jgamazo).\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
