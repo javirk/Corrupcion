@@ -9,23 +9,56 @@ def estacionario(H, C, red):
 	Ccopia = C
 	matriz = np.zeros((2, 2))
 	for iPers in range(0, st.lista['N']):
-		producto = 1
-		for i in range(0, red.conec[iPers]):
-			indice = red.conex[iPers][i]
-			indice = indice.astype(int)
-			producto *= (1 - float(st.lista['alfa'])*float(C[indice]))
+		if st.lista['interacciona']:
+			producto = 1
+			for i in range(0, red.conec[iPers]):
+				indice = red.conex[iPers][i]
+				indice = indice.astype(int)
+				producto *= (1 - float(st.lista['alfa']) * float(C[indice]))
 
-		T22 = (1 - st.lista['delta1']) * producto
-		T21 = st.lista['r']
-		T23 = st.lista['delta2']
+			T22 = (1 - st.lista['delta1']) * producto
+			T21 = st.lista['r']
 
-		producto = 1
-		for i in range(0, red.conec[iPers]):
-			indice = red.conex[iPers][i]
-			indice = indice.astype(int)
-			producto *= (1 - float(st.lista['beta'])*float(H[indice]))
+			producto = 1
+			for i in range(0, red.conec[iPers]):
+				indice = red.conex[iPers][i]
+				indice = indice.astype(int)
+				R_in = 1 - H[indice] - C[indice]
+				producto *= (1 - float(st.lista['delta2']) * float(R_in))
+			T23 = 1 - producto
 
-		T33 = (1 - st.lista['delta2']) * (1 - st.lista['b']) * producto
+			productobeta = 1
+			productogamma = 1
+			for i in range(0, red.conec[iPers]):
+				indice = red.conex[iPers][i]
+				indice = indice.astype(int)
+				productobeta *= (1 - float(st.lista['beta']) * float(H[indice]))
+			for i in range(0, red.conec[iPers]):
+				indice = red.conex[iPers][i]
+				indice = indice.astype(int)
+				R_in = 1 - H[indice] - C[indice]
+				productogamma *= (1 - float(st.lista['delta2']) * float(R_in))
+
+			T33 = (1 - st.lista['b']) * productobeta * productogamma
+		else:
+			producto = 1
+			for i in range(0, red.conec[iPers]):
+				indice = red.conex[iPers][i]
+				indice = indice.astype(int)
+				producto *= (1 - float(st.lista['alfa']) * float(C[indice]))
+
+			T22 = (1 - st.lista['delta1']) * producto
+			T21 = st.lista['r']
+			T23 = st.lista['delta2']
+
+			productobeta = 1
+			for i in range(0, red.conec[iPers]):
+				indice = red.conex[iPers][i]
+				indice = indice.astype(int)
+				productobeta *= (1 - float(st.lista['beta']) * float(H[indice]))
+
+			T33 = (1 - st.lista['delta2']) * (1 - st.lista['b']) * productobeta
+
 
 		matriz[0][0] = T22 - T21
 		matriz[0][1] = T23 - T21
@@ -41,15 +74,26 @@ def estacionario(H, C, red):
 	C = Ccopia
 	return H, C
 
+def cortaVector(vector, cantidad):
+	long = int(cantidad*vector.size/100)
+	cvector = np.zeros((long, 1))
+	for i in range(0, long):
+		cvector[i] = vector[i]
+
+	return cvector
+
+def sacaHubs(red):
+	sconec = cortaVector(red.conec, 25)
+	total = int(st.lista['cuanto'] * sconec.size/100)
+	hubs = np.argpartition(sconec, -total, axis = 0)[-total:]
+
+	return hubs
+
 def creaPersonas(H, C):
 	Ntotal = len(H)
 	for i in range(0, Ntotal):
-		Hi = random.random()
-		Ci = random.random()
-		Ri = random.random()
-		H[i] = Hi/(Hi+Ci+Ri)
-		C[i] = Ci/(Hi+Ci+Ri)
-
+		H[i] = st.lista['inicialHonestos']
+		C[i] = 1-H[i]
 	return H, C
 
 def escribeTodo(propC, propH, iRed):
@@ -57,10 +101,50 @@ def escribeTodo(propC, propH, iRed):
 	outfile = open(nombre, 'wt')
 	for t in range(0, len(propC)):
 		l = [str(t), str(propC[t]), str(propH[t]), str(1 - propC[t] - propH[t])]
-		data = '\t'.join("%s" % (x) for x in l)
+		data = '\t'.join("%s" % x for x in l)
 		data += "\n"
 		outfile.write(data)
 	outfile.close()
+
+def escribeParametro(mediaC, par1, par2, npar1, npar2, carpeta):
+	nombre = carpeta + '/resu_' + str(npar1) + str(npar2) + '.txt'
+	outfile = open(nombre, 'wt')
+
+	valormedia = np.round(mediaC, decimals=4)
+
+	for i in range(0, st.lista['cantidad1']):
+		for j in range(0, st.lista['cantidad2']):
+			l = [str(float("{0:.4f}".format(par1[i]))), str(float("{0:.4f}".format(par2[j]))), str(float(valormedia[i][j]))]
+			data = '\t'.join("%s" % x for x in l)
+			data += "\n"
+			outfile.write(data)
+		data = "\n"
+		outfile.write(data)
+	outfile.close()
+
+def sacaAcumulada(vec, nuevo = -1):
+	if len(vec) == st.lista['tiempoTer'] and nuevo != -1:
+		for i in range(1, st.lista['tiempoTer']):
+			vec[i-1] = vec[i]
+		vec[st.lista['tiempoTer']-1] = nuevo
+
+	acumulada = sum(vec) / float(len(vec))
+
+	return acumulada, vec
+
+def sacaNombre():
+    import datetime
+    i = datetime.datetime.now()
+    fname = str(i.day)+str(i.month)+str(i.year)+str(i.hour)+str(i.minute)
+    return fname
+
+def sacaParametro(i, cant):
+    sup = 0.5
+    inf = 0
+
+    par = ((sup-inf)/float(cant))*i
+
+    return par
 
 def importarDatos(cantidad):
 	for i in range(0, cantidad):

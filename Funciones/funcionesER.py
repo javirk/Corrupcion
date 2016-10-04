@@ -11,7 +11,7 @@ class redER:
 		self.guardar = guardar
 
 		if archivo:
-			self.ruta = 'Input/' + ruta
+			self.ruta = 'Input/ER/' + ruta
 			error = self.inicializa()
 			if error:
 				print("Ha habido un error, te doy una Erdos-Renyi en su lugar")
@@ -80,7 +80,7 @@ class redER:
 		G = nx.from_numpy_matrix(self.ady)
 		plt.close()
 		nx.draw_random(G)
-		plt.savefig('Resultados/red.png')
+		plt.savefig('../Plot/red_J.png')
 
 	def inicializa(self):
 		try:
@@ -95,7 +95,7 @@ class redER:
 		import Funciones.funcionesMT as Fun
 		self.N = Fun.dameN(self.ruta)
 		self.kmax = 0
-		self.creaTodoER()
+		self.creaTodo()
 
 		for linea in f:
 			linea = linea.split()
@@ -146,6 +146,151 @@ class redER:
 		f.close()
 		print('Red guardada en ' + nombre)
 
+class redAL:
+	def __init__(self, guardar=False, archivo=True, ruta='red_0.txt', k=6, N=1000):
+		self.conec = []
+		self.conex = []
+		self.ady = []
+		self.guardar = guardar
+
+		if archivo:
+			self.ruta = 'Input/AL/' + ruta
+			error = self.inicializa()
+			if error:
+				print("Ha habido un error, no existen redes aleatorias guardadas")
+		else:
+			self.ruta = 'Input/BA/'+ruta
+			error = self.inicializa()
+			if error:
+				print("Ha habido un error, no existen redes BA guardadas")
+
+			self.configura()
+
+			if self.guardar:
+				self.escribeRed()
+				print("La red está acabada y guardada.")
+
+	def inicializa(self):
+		try:
+			f = open(self.ruta, 'rt')
+		except:
+			print("No pudo abrirse el archivo especificado")
+			error = True
+			return error
+
+		error = 0
+
+		import Funciones.funcionesMT as Fun
+		self.N = Fun.dameN(self.ruta)
+		self.kmax = 0
+		self.conec = np.zeros((self.N, 1))
+		self.conec = self.conec.astype(int)
+
+		self.ady = np.zeros((self.N, self.N))
+		self.ady = self.ady.astype(int)
+
+		self.conex = np.zeros((self.N, self.kmax))
+		self.conex = self.conex.astype(int)
+
+		for linea in f:
+			linea = linea.split()
+			i = int(linea[0])
+			j = int(linea[1])
+			self.ady[i][j] = 1
+			self.ady[j][i] = 1
+
+			self.conec[i] += 1
+			self.conec[j] += 1
+
+			if (self.conec[i] > self.kmax) or (self.conec[j] > self.kmax):
+				vec = np.zeros((self.N, 1))
+				self.conex = np.hstack((self.conex, vec))
+				self.kmax += 1
+
+			self.conex[i][self.conec[i] - 1] = j
+			self.conex[j][self.conec[j] - 1] = i
+
+		f.close()
+		return error
+
+	def configura(self):
+		# for i in range(0, int(red.N/2)):
+		for i in range(0, 6000):
+			n1 = 0
+			n2 = 0
+			while n1 == n2:
+				n1 = random.randint(0, self.N - 1)
+				n2 = random.randint(0, self.N - 1)
+
+			if n2 in self.conex[n1]:
+				i -= 1
+				pass
+			# Si no están conectados se puede seguir
+			else:
+				# Elige ahora para cada uno de los nodos a alguien con quien esté conectado
+				n1c = random.choice(self.conex[n1])
+				n2c = random.choice(self.conex[n2])
+				while n2c in self.conex[n1c] or n1c == n2c or n1c == 0 or n2c == 0:
+					n1c = random.choice(self.conex[n1])
+					n2c = random.choice(self.conex[n2])
+
+				# Salen dos nodos que no están conectados entre sí --> el número total de links no se va a perder
+				self.cambia(n1, n2, n1c, n2c)
+
+	def cambia(self, n1, n2, n1c, n2c):
+		# Cambia conex, el vector conec se queda igual
+		# Cambio n1->n2
+		indice = np.where(self.conex[n1] == n1c)
+		indice = indice[0][0]
+		self.conex[n1][indice] = n2
+		# Cambio n1c->n2c
+		indice = np.where(self.conex[n1c] == n1)
+		indice = indice[0][0]
+		self.conex[n1c][indice] = n2c
+		# Cambio n2->n1
+		indice = np.where(self.conex[n2] == n2c)
+		indice = indice[0][0]
+		self.conex[n2][indice] = n1
+		# Cambio n2c->n1c
+		indice = np.where(self.conex[n2c] == n2)
+		indice = indice[0][0]
+		self.conex[n2c][indice] = n1c
+
+		# Cambia la matriz de adyacencia:
+		self.ady[n1][n2] = 1
+		self.ady[n2][n1] = 1
+		self.ady[n1c][n2c] = 1
+		self.ady[n2c][n1c] = 1
+
+		self.ady[n1][n1c] = 0
+		self.ady[n1c][n1] = 0
+		self.ady[n2][n2c] = 0
+		self.ady[n2c][n2] = 0
+
+	def escribeRed(self):
+		import os
+		cuenta = 0
+
+		while os.path.isfile('../Output/AL/red_' + str(cuenta) + '.txt'):
+			cuenta += 1
+
+		nombre = '../Output/AL/red_' + str(cuenta) + '.txt'
+
+		f = open(nombre, 'wt')
+		# primera = '#Red de tipo ' + self.tipo + '\n'
+		# f.write(primera)
+
+		for j in range(0, self.N):
+			for i in range(0, self.kmax):
+				if self.conex[j][i] > j:
+					l = [str(j), str(int(self.conex[j][i]))]
+					data = ' '.join("%s" % x for x in l)
+					data += "\n"
+					f.write(data)
+
+		f.close()
+		print('Red guardada en ' + nombre)
+
 class redBA:
 	def __init__(self, guardar=False, archivo=True, ruta='red_0.txt', k=6, N=1000):
 		self.conec = []
@@ -154,10 +299,12 @@ class redBA:
 		self.guardar = guardar
 
 		if archivo:
-			self.ruta = 'Input/' + ruta
+			self.ruta = 'Input/BA/' + ruta
 			error = self.inicializa()
 			if error:
 				print("Ha habido un error, te doy una Barabasi-Albert en su lugar")
+				self.N = N
+				self.k = k
 				self.guardar = guardar
 				self.genera()
 				if self.guardar:
@@ -197,29 +344,6 @@ class redBA:
 				self.ady[j][i] = 1
 
 		self.kmax = int(max(self.conec))
-
-	def componenteGigante(self, nodo, cuenta):
-		for i in range(0, self.conec[nodo]):
-			if cuenta[self.conex[nodo][i]] == 0:
-				cuenta[self.conex[nodo][i]] = 1
-				self.componenteGigante(self.conex[nodo][i], cuenta)
-
-	"""def dameRed(self):
-		es = 0
-		while es == 0:
-			cuenta = np.zeros((self.N, 1))
-			self.kmax = 0
-			self.creaTodoER()
-			self.generaER()
-			self.componenteGigante(0, cuenta)
-
-			if 0 in cuenta:
-				es = 0
-			else:
-				es = 1
-
-		if self.guardar:
-			self.escribeRed()"""
 
 	def buscaNodo(self, rand, caja):
 		for i in range(0, len(caja)):
@@ -310,7 +434,14 @@ class redBA:
 		import Funciones.funcionesMT as Fun
 		self.N = Fun.dameN(self.ruta)
 		self.kmax = 0
-		self.creaTodoER()
+		self.conec = np.zeros((self.N, 1))
+		self.conec = self.conec.astype(int)
+
+		self.ady = np.zeros((self.N, self.N))
+		self.ady = self.ady.astype(int)
+
+		self.conex = np.zeros((self.N, self.kmax))
+		self.conex = self.conex.astype(int)
 
 		for linea in f:
 			linea = linea.split()
@@ -330,22 +461,22 @@ class redBA:
 			self.conex[i][self.conec[i] - 1] = j
 			self.conex[j][self.conec[j] - 1] = i
 
-		cuenta = np.zeros((self.N, 1))
-		self.componenteGigante(0, cuenta)
-		if 0 in cuenta:
-			print("Ojo, la red tiene nodos aislados")
-
 		f.close()
 		return error
 
-	def escribeRed(self):
+	def escribeRed(self, conf=False):
 		import os
 		cuenta = 0
+		if conf:
+			while os.path.isfile('../Output/AL/red_' + str(cuenta) + '.txt'):
+				cuenta += 1
 
-		while os.path.isfile('Output/BA/red_' + str(cuenta) + '.txt'):
-			cuenta += 1
+			nombre = '../Output/AL/red_' + str(cuenta) + '.txt'
+		else:
+			while os.path.isfile('../Output/BA/red_' + str(cuenta) + '.txt'):
+				cuenta += 1
 
-		nombre = 'Output/BA/red_' + str(cuenta) + '.txt'
+			nombre = '../Output/BA/red_' + str(cuenta) + '.txt'
 
 		f = open(nombre, 'wt')
 		# primera = '#Red de tipo ' + self.tipo + '\n'
@@ -374,9 +505,24 @@ class redBA:
 		outfile = open(nombre, 'wt')
 		for i in range(0, self.kmax):
 			l = [str(i), str(H[i])]
-			data = '\t'.join("%s" % (x) for x in l)
-			data += "\n"
+			data = '\t'.join("%s" % x for x in l)
+			data += '\n'
 			outfile.write(data)
 		outfile.close()
 
-#R = redBA(archivo = False, k = 6, N = 1000)
+for ired in range(21, 22):
+	print("Red")
+	ruta = 'red_'+str(ired)+'.txt'
+	R = redER(guardar=True, archivo=False, ruta=ruta, k=6, N=300)
+
+"""R = redER(guardar = False, archivo = True, ruta = 'red_J.txt')
+print('Todo hecho')
+#R.dibuja()
+cuentaa = np.zeros((300, 1))
+R.componenteGigante(0, cuentaa)
+if 0 in cuentaa:
+	es = 0
+else:
+	es = 1
+
+print(str(es))"""
