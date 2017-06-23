@@ -1,8 +1,8 @@
 import sys
 sys.path.insert(0, '/Settings')
-sys.path.insert(0, '/Funciones')
+sys.path.insert(0, '/Clases')
 
-import Funciones.funcionesER as fER, Funciones.funcionesES as fun, numpy as np
+import Clases.redClase as fER, Clases.funcionesES as fun, numpy as np
 import Settings.settingsES as settingsES, os
 
 settingsES.init()
@@ -37,56 +37,62 @@ else:
     red = fER.redER(guardar=settingsES.lista['guardar'], archivo=True, ruta=ruta, k=k, N=N)
 
 #for i in range(0, cantidad):
+for b in [float(j) * 0.25 for j in range(1, 4, 1)]:
+    for beta in [float(l) / 10 for l in range(1, 8, 2)]:
+        settingsES.lista['b'] = b
+        #settingsES.lista['r'] = r
+        settingsES.lista['beta'] = beta
+        for i in range(0, c1):
+            if c1 > 1:
+                settingsES.lista[nombrePar1] = fun.sacaParametro(i, c1)
+            parametro1[i] = settingsES.lista[nombrePar1]
+            #print(nombrePar1 + ' = ' + str(settingsES.lista[nombrePar1]))
 
-for i in range(0, c1):
-    if c1 > 1:
-        settingsES.lista[nombrePar1] = fun.sacaParametro(i, c1)
-    parametro1[i] = settingsES.lista[nombrePar1]
-    print(nombrePar1 + ' = ' + str(settingsES.lista[nombrePar1]))
+            for j in range(0, c2):
+                if c2 > 1:
+                    settingsES.lista[nombrePar2] = fun.sacaParametro(j, c2)
+                parametro2[j] = settingsES.lista[nombrePar2]
+                #print(nombrePar2 + ' = ' + str(settingsES.lista[nombrePar2]))
 
-    for j in range(0, c2):
-        if c2 > 1:
-            settingsES.lista[nombrePar2] = fun.sacaParametro(j, c2)
-        parametro2[j] = settingsES.lista[nombrePar2]
-        print(nombrePar2 + ' = ' + str(settingsES.lista[nombrePar2]))
+                H = np.zeros((N, 1))
+                C = np.zeros((N, 1))
 
-        H = np.zeros((N, 1))
-        C = np.zeros((N, 1))
+                propH = []
+                propC = []
+                vecpuntos = []
 
-        propH = []
-        propC = []
-        vecpuntos = []
+                H, C = fun.creaPersonas(H, C)
+                #settingsES.lista[nombrePar] = fun.sacaParametro(i, cantidad)
+                #parametro[i] = fun.sacaParametro(i, cantidad)
 
-        H, C = fun.creaPersonas(H, C)
-        #settingsES.lista[nombrePar] = fun.sacaParametro(i, cantidad)
-        #parametro[i] = fun.sacaParametro(i, cantidad)
-
-        for itiempo in range(0, tiempoTer):
-            H, C = fun.estacionario(H, C, red)
-            vecpuntos.append(float(C.mean(0)))
-        acumuladaC, vecpuntos = fun.sacaAcumulada(vecpuntos)
+                for itiempo in range(0, tiempoTer):
+                    H, C = fun.estacionario(H, C, red)
+                    vecpuntos.append(float(np.mean(C)))
+                acumuladaC, vecpuntos = fun.sacaAcumulada(vecpuntos)
 
 
-        # Se saca la media para cada tiempo para ver cómo evoluciona
-        #Condición de parada: abs(punto-media anterior)<epsilon (=10^-4)
-        while abs(C.mean(0) - acumuladaC) > settingsES.lista['eps']:
-            H, C = fun.estacionario(H, C, red)
+                # Se saca la media para cada tiempo para ver cómo evoluciona
+                #Condición de parada: abs(punto-media anterior)<epsilon (=10^-4)
+                t = 0
+                while abs(np.mean(C) - acumuladaC) > settingsES.lista['eps'] and t < tiempo:
+                    H, C = fun.estacionario(H, C, red)
 
-            acumuladaC, vecpuntos = fun.sacaAcumulada(vecpuntos, nuevo = C.mean(0))
-            print('H = ' + str(sum(H)/float(len(H))))
-            print('C = ' + str(sum(C)/float(len(C))))
+                    acumuladaC, vecpuntos = fun.sacaAcumulada(vecpuntos, nuevo = np.mean(C))
+                    t += 1
+                    #print('H = ' + str(sum(H)/float(len(H))))
+                    #print('C = ' + str(sum(C)/float(len(C))))
 
-        #mediaC.append(float(C.mean(0)))
-        #mediaH.append(float(H.mean(0)))
+                #mediaC.append(float(C.mean(0)))
+                #mediaH.append(float(H.mean(0)))
 
-        mediaC[i][j] = sum(C) / float(len(C))
-        #mediaH[i][j] = sum(H)/float(len(H))
-        """for itiempo in range(0, tiempo):
-            propH.append(float(H.mean(0)))
-            propC.append(float(C.mean(0)))
-            H, C = fun.estacionario(H, C, red)
+                mediaC[i][j] = sum(C) / float(len(C))
+                #mediaH[i][j] = sum(H)/float(len(H))
+                """for itiempo in range(0, tiempo):
+                    propH.append(float(H.mean(0)))
+                    propC.append(float(C.mean(0)))
+                    H, C = fun.estacionario(H, C, red)
 
-        mediaC[i] = sum(propC) / float(len(propC))
-        mediaH[i] = sum(propH) / float(len(propH))"""
+                mediaC[i] = sum(propC) / float(len(propC))
+                mediaH[i] = sum(propH) / float(len(propH))"""
 
-fun.escribeParametro(mediaC, parametro1, parametro2, nombrePar1, nombrePar2, carpeta)
+        fun.escribeParametro(mediaC, parametro1, parametro2,carpeta, settingsES.lista['b'], settingsES.lista['beta'], settingsES.lista['r'])

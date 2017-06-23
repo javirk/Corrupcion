@@ -136,12 +136,12 @@ def escribeTodo(propC, propH, iRed, carpeta):
 		outfile.write(data)
 	outfile.close()
 
-def escribeParametro(mediaC, par1, par2, npar1, npar2, carpeta):
-	nombre = carpeta + '/resu_' + str(npar1) + str(npar2) + '.txt'
-	outfile = open(nombre, 'wt')
-
+def escribeParametro(mediaC, par1, par2, carpeta, b, beta, r):
 	valormedia = np.round(mediaC, decimals=4)
 
+	'''
+	nombre = carpeta + '/resu_' + str(npar1) + str(npar2) + '.txt'
+	outfile = open(nombre, 'wt')
 	for i in range(0, st.lista['cantidad1']):
 		for j in range(0, st.lista['cantidad2']):
 			l = [str(float("{0:.4f}".format(par1[i]))), str(float("{0:.4f}".format(par2[j]))), str(float(valormedia[i][j]))]
@@ -150,6 +150,38 @@ def escribeParametro(mediaC, par1, par2, npar1, npar2, carpeta):
 			outfile.write(data)
 		data = "\n"
 		outfile.write(data)
+	outfile.close()'''
+
+
+	#if st.lista['cantidad2'] > 1:
+	#Para escribirlos bien
+	bst = "%0.2f" % b
+	rst = "%0.2f" % r
+	betast = "%0.2f" % beta
+	nombre = carpeta + '/par_' + bst + '_' + rst + '_' + betast + '.txt'
+
+	print(nombre)
+	outfile = open(nombre, 'wt')
+	#else:
+	#nombre = carpeta + '/par_' + '_' + str(npar1) + '.txt'
+	#outfile = open(nombre, 'wt')
+
+	for i in range(0, st.lista['cantidad1']):
+		if st.lista['cantidad2'] > 1:
+			for j in range(0, st.lista['cantidad2']):
+				l = [str(float("{0:.4f}".format(par1[i]))), str(float("{0:.4f}".format(par2[j]))),
+					 str(float(valormedia[i][j]))]
+				data = '\t'.join("%s" % x for x in l)
+				data += "\n"
+				outfile.write(data)
+		else:
+			l = [str(float("{0:.3f}".format(par1[i]))),
+				 str(float(valormedia[i][0]))]
+			data = '\t'.join("%s" % x for x in l)
+			outfile.write(data)
+		data = "\n"
+		outfile.write(data)
+
 	outfile.close()
 
 def sacaAcumulada(vec, nuevo = -1):
@@ -169,7 +201,7 @@ def sacaNombre():
     return fname
 
 def sacaParametro(i, cant):
-    sup = 0.5
+    sup = 1.0
     inf = 0
 
     par = ((sup-inf)/float(cant))*i
