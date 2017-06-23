@@ -18,7 +18,8 @@
         <h1>A model of corruption</h1>
         <p></p>
 
-        <p class="view"><a href="https://github.com/javirk/Corruption">View the Project on GitHub <small>javirk/Corruption</small></a></p>
+        <p class="view"><a href="https://github.com/javirk/Corruption">View the Project on GitHub <small>javirk/Corruption
+          </small></a></p>
 
 
         <ul>
@@ -29,33 +30,42 @@
       </header>
       <section>
         <h1>
-<a id="corruption-model" class="anchor" href="#corruption-model" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Corruption Model</h1>
+<a id="corruption-model" class="anchor" href="#corruption-model" aria-hidden="true">
+  <span aria-hidden="true" class="octicon octicon-link"></span></a>Corruption Model</h1>
 
 <h3>
-<a id="welcome" class="anchor" href="#welcome" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome</h3>
+<a id="welcome" class="anchor" href="#welcome" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+  Welcome</h3>
 
-<p>This program developed entirely under Python reproduces a simple stochastic agent-based model of corruption using Monte Carlo method. It also contains code for the implementation of a non-stationary Markov model designed specifically for the model.</p>
+<p>This program developed entirely under Python reproduces a simple stochastic agent-based model of corruption using Monte Carlo method.
+  It also contains code for the implementation of a non-stationary Markov model designed specifically for the model.</p>
 
 <h3>
-<a id="files" class="anchor" href="#files" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Files</h3>
+<a id="files" class="anchor" href="#files" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>
+  Files</h3>
 
 <p>It basically has 3 main files that run independently:</p>
 
-<pre><code>esParametro.py
+<pre><code>
 esTiempo.py
-mtParametro.py
-mtTiempo.py
-analizar.py
+esParametro.py
+main.py
 </code></pre>
 
-<p>The first two programs refer to the non-stationary Markov model, the "mt" ones are used to reproduce the Montecarlo and the last one just analyzes the results given. The parameters for each program can be changed in the Settings folder.</p>
+<p>The first two programs refer to the non-stationary Markov model. The "main.py" uses the class puebloClase in the folder "Clases" to 
+  create a village where the Monte Carlo algorithm will be used.</p>
 
 <h3>
-<a id="more-information" class="anchor" href="#more-information" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>More information</h3>
+<a id="more-information" class="anchor" href="#more-information" aria-hidden="true">
+  <span aria-hidden="true" class="octicon octicon-link"></span></a>More information</h3>
 
-<p>The code itself also has functions to create scale-free and Erdös-Renyi networks that the program uses for the simulations. The networks are to be saved in the <code>Input</code> folder for the program to use them properly.</p>
+<p>The code itself also has functions to create scale-free and Erdös-Renyi networks that the program uses for the simulations. 
+  The networks are to be saved in the <code>Input</code> folder for the program to use them properly. Also, the classes that generate 
+  them is in the "Clases/RedClase.py". There you'll find two different classes depending on which type of network you want to generate
+        </p>
 
-<p>In case you want to generate networks and use them separately from the main program a folder named <code>Output</code> with the same structure as the <code>Input</code> folder must be created.</p>
+<p>In case you want to generate networks and use them separately from the main program a folder named <code>Output</code> with the same 
+  structure as the <code>Input</code> folder must be created.</p>
 
 <p>To run the program you must create a folder named <code>Resultados</code> with the following folders in it:</p>
 
@@ -65,12 +75,16 @@ Montecarlo
 MontecarloPar
 </code></pre>
 
-<p>Depending on the program you want to run (two folders for Markov [<code>Estacionario</code>] and two for Monte Carlo). After that the folders are created automatically by the program.</p>
-
-<p>For the results to be analyzed it is necessary to change the <code>settingsAN</code> file properly, pointing at the folder where the results are (there is an example in it).</p>
+<p>Depending on the program you want to run (two folders for Markov [<code>Estacionario</code>] and two for Monte Carlo). After that,
+  the folders are created automatically by the program.</p>
 
 <h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<a id="settings" class="anchor" href="#settings" aria-hidden="true">
+  <span aria-hidden="true" class="octicon octicon-link"></span></a>Settings</h3>
+        
+<h3>
+<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true">
+  <span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 
 <p>This is an academic study and the code uploaded here is only written by Javier Gamazo.</p>
       </section>
