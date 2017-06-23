@@ -46,14 +46,13 @@
 
 <p>It basically has 3 main files that run independently:</p>
 
-<pre><code>
-esTiempo.py
+<pre><code>esTiempo.py
 esParametro.py
 main.py
 </code></pre>
 
-<p>The first two programs refer to the non-stationary Markov model. The "main.py" uses the class puebloClase in the folder "Clases" to 
-  create a village where the Monte Carlo algorithm will be used.</p>
+        <p>The first two programs refer to the non-stationary Markov model. The <code>main.py</code> uses the class puebloClase in the 
+          folder <code>Clases</code> to create a village where the Monte Carlo algorithm will be used.</p>
 
 <h3>
 <a id="more-information" class="anchor" href="#more-information" aria-hidden="true">
@@ -61,11 +60,12 @@ main.py
 
 <p>The code itself also has functions to create scale-free and Erdös-Renyi networks that the program uses for the simulations. 
   The networks are to be saved in the <code>Input</code> folder for the program to use them properly. Also, the classes that generate 
-  them is in the "Clases/RedClase.py". There you'll find two different classes depending on which type of network you want to generate
-        </p>
+  them is in the <code>Clases/RedClase.py</code>. There you'll find two different classes depending on which type of network you want 
+  to generate.</p>
 
 <p>In case you want to generate networks and use them separately from the main program a folder named <code>Output</code> with the same 
-  structure as the <code>Input</code> folder must be created.</p>
+  structure as the <code>Input</code> folder must be created. Also, examples of networks with N=1000 and k=6 have been saved in zip
+  files in the <code>Input</code> folder.</p>
 
 <p>To run the program you must create a folder named <code>Resultados</code> with the following folders in it:</p>
 
@@ -81,6 +81,25 @@ MontecarloPar
 <h3>
 <a id="settings" class="anchor" href="#settings" aria-hidden="true">
   <span aria-hidden="true" class="octicon octicon-link"></span></a>Settings</h3>
+  <h4><a id="settings_MC" class="anchor" href="#settings_MC" aria-hidden="true">
+  <span aria-hidden="true" class="octicon octicon-link"></span></a>Monte Carlo</h4>   
+        <p>Everything should be self explanatory just looking at the files. However I will explain it here too: to run the 
+          <code>main</code> program, the route for the settings file is <code>Settings/settings.ini</code>. Due to the high times of 
+          compuyting, I strongly recommend not to change the parameters for the networks (N=1000 and k=6) other than 
+          <code>tipoRed</code>. If <code>archivoRed = True</code>, the program will try to find networks in the <code>Input</code> 
+          folder.</p>
+        <p>In the <code>[Ejecucion]</code> part, the parameter <code>metodo</code> can't be changed or the program will stop working.
+        </p>
+        <p>In <code>[Version]</code>, 2 is used for the 4p model and the parameters <code>delta1</code> and <code>delta2</code> 
+          in <code>[Sistema] won't be considered.</code></p>
+        <p>If everything is set correctly, a folder inside <code>Montecarlo</code> or <code>MontecarloPar</code> will be created. </p>
+          
+         
+  <h4><a id="settings_MK" class="anchor" href="#settings_MK" aria-hidden="true">
+  <span aria-hidden="true" class="octicon octicon-link"></span></a>Markov</h4>   
+        <p>The file <code>Settings/SettingsES.py</code> should be edited for this. It's just roughly the same as before.</p>
+          
+          
         
 <h3>
 <a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true">
