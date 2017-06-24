@@ -30,7 +30,7 @@ for i in range(0, len(xx)):
 x0 = X[::2, ::2].flatten()
 y0 = Y[::2, ::2].flatten()
 
-#Important equations
+#Ecuaciones importantes
 varX = r+(((1-alfa*y0)**k)-r)*x0 + (1-r-x0-y0)*y0
 varY = (1-(1-alfa*y0)**k)*x0 + ((x0+y0)*(1-b)*(1-beta*x0)**k)*y0
 
@@ -49,7 +49,7 @@ plot = figure(x_range=(0, 1), y_range=(0, 1), x_axis_label='H', y_axis_label='C'
               title="Retrato de fases")
 plot.segment('x0', 'y0', 'x1', 'y1', source=source, line_width=1)
 
-#JS function that activates when slider value is changed
+# Función en JS que se activa cuando cambia el slider
 callback = CustomJS(args=dict(source=source), code="""
     var data = source.data;
     var sel = select.value;
