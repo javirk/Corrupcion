@@ -58,6 +58,10 @@ class Town:
         self.creaPersonas()
 
     def leeConfig(self, secc):
+        """
+        Lee la configuración del archivo en la variable self.rutaconf
+        """
+
         for seccion in secc:
             options = self.Config.options(seccion)
             for option in options:
@@ -98,6 +102,12 @@ class Town:
                     exit()
 
     def evoluciona(self, b, beta):
+        """
+        Simula el método de Monte Carlo, tanto la termalización como el tiempo de sacar resultados
+        :param b, beta: como para el trabajo se han sacado gráficas con parámetros diferentes, para hacerlo más
+        sencillo.
+        Guarda la información en propX o en mediaParC según el tipo de método que se esté usando
+        """
         if self.ejecucion['tipometodo'] == 'tiempo':
             for t in range(0, self.ejecucion['tterma']):
                 self.montecarlo()
@@ -119,7 +129,7 @@ class Town:
             #Evolución por parámetro
             self.parametro1 = [None] * self.c1
             self.parametro2 = [None] * self.c2
-
+            # Crea la matriz que va a contener los resultados. Dimensiones c1xc2
             self.mediaParC = [[0 for i in range(self.c2)] for j in range(self.c1)]
 
             for i in tqdm(range(0, self.c1)):
@@ -150,6 +160,9 @@ class Town:
                     self.propR = []
 
     def analiza(self):
+        """
+        Media y desviación de todos los datos
+        """
         self.mediaTotal['C'] = sum(self.propC)/float(len(self.propC))
         self.desvTotal['C'] = statistics.stdev(self.propC)
         self.mediaTotal['H'] = sum(self.propH)/float(len(self.propH))
@@ -215,6 +228,9 @@ class Town:
         self.escribeConf(carpeta)
 
     def escribeConf(self, carpeta):
+        """
+        Escribe la configuración en un archivo que se guarda con los resultados
+        """
         #ConfigW en el que se escribe
         configW = cp.ConfigParser()
         secc = self.Config.sections()
@@ -237,6 +253,9 @@ class Town:
             configW.write(configfile)
 
     def rellena(self):
+        """
+        Para observar el comportamiento de los links
+        """
         for nodo in range(0, self.red['n']):
             for i in range(0, self.red.conec[nodo]):
                 if self.red.conex[nodo][i] > nodo:
@@ -245,6 +264,9 @@ class Town:
                     self.links[ilink][0] += 1
 
     def montecarlo(self):
+        """
+        Método de Monte Carlo atendiendo a la versión que se ha especificado.
+        """
         Scopia = [x[:] for x in self.S]
         for iPers in range(0, self.red['n']):
             producto = 1
@@ -321,6 +343,9 @@ class Town:
                 self.links[ilink][len(self.links) - 1] -= 1
 
     def creaPersonas(self):
+        """
+        Estado inicial del pueblo
+        """
         for i in range(0, self.red['n']):
             if random.random() < self.sistema['prophon']:
                 self.S[i] = 'H'
